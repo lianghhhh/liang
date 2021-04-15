@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>坦克大战</title>
+		<link rel="stylesheet" type="text/css" href="../css/坦克大战.css"/>
+		<link rel="stylesheet" type="text/css" href="../tanke/iconfont.css"/>
+	</head>
+	<body>
+		<div class="box">
+			<div class="content">
+				<span class="iconfont icon-tankebaike" id="difang1"></span>
+				<span class="iconfont icon-tankebaike" id="difang2"></span>
+				<span class="iconfont icon-tankebaike" id="difang3"></span>
+				<span class="iconfont icon-tankebaike" id="wofang"></span>
+				<div id="qiangti1"></div>
+				
+			</div>
+			<button id="start">游戏开始</button>
+			<button id="reset" onclick="location.reload()">重新开始</button>
+			<div class="text">上下左右键控制我方坦克移动 空格键发射子弹 坦克被攻击到3次即死亡
+			我方坦克永不死亡！！！</div>
+		</div>
+		
+		
+		
+		<script type="text/javascript">
+			var d1tankx = 6;
+			var d2tankx = 6;
+			var d3tankx = 6;
+  			//给上下左右及空格键绑定按键事件:
+			var a = document.getElementById("wofang");
+			var d1 = document.getElementById("difang1");
+         	var d2 = document.getElementById("difang2");
+         	var d3 = document.getElementById("difang3");
+		 document.onkeydown = function(event) {
+            event = event || window.event;
+            var keyCode = event.keyCode;
+            var t = parseFloat(a.style.top) || a.offsetTop;
+            var l = parseFloat(a.style.left) || a.offsetLeft;
+     
+			//document.title = (l+"|"+t);
+            if(keyCode == 37) {//按下左建
+            	l = l <= 0 ? 0 : l;//防止坦克跑出浏览器左边框
+            	if (263 <t && t < 335 && 237 < l && l < 315) {
+            		a.style.left = l + "px";
+            	} else{
+            		a.style.left = l - 2 + "px";
+            	}
+            }
+            else if(keyCode == 38) {//按下上建
+            	t = t <= 0 ? 0 : t;//防止坦克跑出浏览器上边框
+            	if (237 < l && l < 310 && 263 < t && t < 340) {
+            		a.style.top = t+ "px";
+            	} else{
+            		 a.style.top = t - 2 + "px";
+            	}
+            }
+            else if(keyCode == 39) {//按下右建
+				l = l >= 783 ? 783 : l;//防止坦克跑出浏览器右边框
+				if (263 < t && t < 335 && 235 < l && l < 310) {
+            		a.style.left = l+ "px";
+            	} else{
+            		a.style.left = l + 2 + "px";
+            	}
+            }
+            else if(keyCode == 40) {//按下下建
+				t = t >= 490 ? 490 : t;//防止坦克跑出浏览器下边框
+				
+				if (237 < l && l < 310 && 260 < t && t < 335) {
+            		a.style.top = t+"px";
+            	} else{
+            		 a.style.top = t + 2 + "px";
+            	}
+           }
+            else if(keyCode == 32) {//按空格键产生我方坦克子弹
+            	var zd = document.createElement('p');
+		 		var father = document.getElementsByClassName("content")[0];
+		 		father.appendChild(zd);
+				//设置子弹样式：
+		 		zd.style.width = "5px"
+				zd.style.height = "15px";
+				zd.style.borderRadius = "50%";
+				zd.style.background = "#000000";
+				zd.style.position = "absolute";
+				//调整子弹原始位置：
+				zd.style.left = l + 17 + "px";
+				zd.style.top = t - 15 + "px";
+				var zl = parseInt(zd.style.left);
+				var zdtime = setInterval(function(){//我方子弹向上移动
+					var oldtop = parseInt(zd.style.top);
+					var newtop = oldtop - 20;
+					zd.style.top = newtop + "px";
+					//document.title=(zl)
+					if(newtop < 0){//子弹跑出上边框就清除
+						clearInterval(zdtime);
+						var parent = zd.parentElement;
+						parent.removeChild(zd);
+						zd = null;
+						//var fromLastChild=father.removeChild(father.lastChild);
+					} else if(270 < zl && zl < 315 && 300 < newtop && newtop < 340){//子弹遇到障碍物清除：
+						clearInterval(zdtime);
+						var parent = zd.parentElement;
+						parent.removeChild(zd);
+						zd = null;
+						//var fromLastChild=father.removeChild(father.lastChild);
+					}
+					    var d1l = parseInt(getComputedStyle(d1,null).left);
+					 	var d2l = parseInt(getComputedStyle(d2,null).left);
+					 	var d3l = parseInt(getComputedStyle(d3,null).left);
+					 	var d1t = parseInt(getComputedStyle(d1,null).top);
+					 	var d2t = parseInt(getComputedStyle(d2,null).top);
+					 	var d3t = parseInt(getComputedStyle(d3,null).top);
+						if(d1l < zl && zl < d1l+40 && d1t-40 < newtop && newtop< d1t){
+							d1tankx = d1tankx-1;
+						}
+						if(d2l < zl && zl < d2l+40 && d2t-40 < newtop && newtop < d2t){
+							d2tankx = d2tankx-1;
+						}
+						if(d3l < zl && zl < d3l+40 && d3t-40 < newtop && newtop < d3t){
+							d3tankx = d3tankx-1;
+						}
+						
+						if(d1tankx == 0){
+						  d1.remove();
+						 }
+						 if(d2tankx == 0){
+						 	d2.remove();
+						 }
+						 if(d3tankx == 0){
+						 	d3.remove();
+						 }
+						
+						if(d1tankx == 0 && d2tankx == 0 && d3tankx == 0){
+							clearInterval(zdtime);
+							var parent = zd.parentElement;
+							parent.removeChild(zd);
+							zd = null;
+		 					alert("游戏胜利");
+		 					
+		 				}
+					
+					console.log(d1tankx+"|"+d2tankx+"|"+d3tankx);
+					//console.log(parseInt(getComputedStyle(d1,null).left));
+					
+				},300);
+				
+				
+            }
+   		} 
+			// 	给button按钮start绑定点击事件：
+		 	var start= document.getElementById("start");
+		    start.onclick = function(e){
+//		    	console.log(1);
+//		    	console.log(e);
+		    	e.target.blur();//去掉button按钮焦点
+		 	var timer = setInterval(function(){//让敌坦克往下移动100px：
+//		 		console.log(new Date());
+		 		var oldd1t = parseInt(getComputedStyle(d1,null).top);
+		 		var oldd2t = parseInt(getComputedStyle(d2,null).top);
+		 		var oldd3t = parseInt(getComputedStyle(d3,null).top);
+		 		var newd1t = oldd1t + 10;
+		 		var newd2t = oldd2t + 10;
+		 		var newd3t = oldd3t + 10;
+		 		d1.style.top = newd1t + "px";
+		 		d2.style.top = newd2t + "px";
+		 		d3.style.top = newd3t + "px";
+				//console.log(newd1t)
+		 		if(newd1t > 100){
+		 			clearInterval(timer);
+		 		var bulltime = setInterval(function(){//产生敌方子弹：
+		 		var dzd1 = document.createElement('div');
+		 		var dzd2 = document.createElement('div');
+		 		var dzd3 = document.createElement('div');
+		 		
+		 		if(d1tankx == 0){
+		 			dzd1.style.display="none"
+		 		};
+		 		if(d2tankx == 0){
+		 			dzd2.style.display="none"
+//					dzd2.remove();
+		 		};
+		 		if(d3tankx == 0){
+//		 			var parent = dzd3.parentElement;
+//					parent.removeChild(dzd3);
+//					dzd3.remove();
+					dzd3.style.display="none"
+		 		}
+		 		var father = document.getElementsByClassName("content")[0];
+		 		father.appendChild(dzd1);
+		 		father.appendChild(dzd2);
+		 		father.appendChild(dzd3);
+		 		var d1l = parseInt(d1.style.left);
+		 	    var d2l = parseInt(d2.style.left);
+		 		var d3l = parseInt(d3.style.left);
+		 		var d1t = parseInt(d1.style.top);
+		 		var d2t = parseInt(d2.style.top);
+		 		var d3t = parseInt(d3.style.top);
+				//设置子弹样式：
+		 		dzd1.style.width = dzd2.style.width = dzd3.style.width = "5px"
+				dzd1.style.height = dzd2.style.height = dzd3.style.height = "15px";
+				dzd1.style.borderRadius = dzd2.style.borderRadius = dzd3.style.borderRadius = "50%";
+				dzd1.style.background = dzd2.style.background = dzd3.style.background = "red";
+				dzd1.style.position = dzd2.style.position = dzd3.style.position = "absolute";
+				//调整子弹原始位置：
+				dzd1.style.left = d1l + 20 + "px";
+				dzd1.style.top = d1t + 40 + "px";
+				dzd2.style.left = d2l + 20 + "px";
+				dzd2.style.top = d2t + 40 + "px";
+				dzd3.style.left = d3l + 20 + "px";
+				dzd3.style.top = d3t + 40 + "px";
+				var dzd1l = parseInt(dzd1.style.left);
+				var dzd2l = parseInt(dzd2.style.left);
+				var dzd3l = parseInt(dzd3.style.left);
+				
+				var dzdtimea=setInterval(function(){
+					var oldtop1 = parseInt(dzd1.style.top);
+					var newtop1 = oldtop1 + 20;
+					dzd1.style.top = newtop1 + "px";
+					if(newtop1 > 510){//第一个敌方坦克子弹跑出下边框清除子弹：
+						clearInterval(dzdtimea);
+						var parent = dzd1.parentElement;
+						parent.removeChild(dzd1);
+						dzd1 = null;
+					} else if(270 < dzd1l && dzd1l < 315 && 300 < newtop1 && newtop1 < 340){//敌方子弹遇到障碍物清除子弹
+						clearInterval(dzdtimea);
+						var parent = dzd1.parentElement;
+						parent.removeChild(dzd1);
+						dzd1 = null;
+					};
+				},500);
+				var dzdtimeb = setInterval(function(){
+					var oldtop2=parseInt(dzd2.style.top);
+					var newtop2=oldtop2+20;
+					dzd2.style.top=newtop2+"px";
+					if(newtop2 > 510){//第二个敌方坦克子弹跑出下边框清除子弹：
+						clearInterval(dzdtimeb);
+						var parent = dzd2.parentElement;
+						parent.removeChild(dzd2);
+						dzd2 = null;
+					} else if(270 < dzd2l && dzd2l < 315 && 300 < newtop2 && newtop2 < 340){//敌方子弹遇到障碍物清除子弹
+						clearInterval(dzdtimeb);
+						var parent=dzd2.parentElement;
+						parent.removeChild(dzd2);
+						dzd2 = null;
+					};
+				},500);
+				var dzdtimec=setInterval(function(){
+					var oldtop3=parseInt(dzd3.style.top);
+					var newtop3=oldtop3 + 20;
+					dzd3.style.top=newtop3 + "px";
+					if(newtop3 > 510){//第二个敌方坦克子弹跑出下边框清除子弹：
+						clearInterval(dzdtimec);
+						var parent = dzd3.parentElement;
+						parent.removeChild(dzd3);
+						dzd3=null;
+					} else if(270 < dzd3l && dzd3l < 315 && 300 < newtop3 && newtop3 < 340){//敌方子弹遇到障碍物清除子弹
+						clearInterval(dzdtimec);
+						var parent=dzd3.parentElement;
+						parent.removeChild(dzd3);
+						dzd3=null;
+					}
+				},500)
+			},5000)
+//				
+		 			var randomtime = setInterval(function(){//产生两组随机数
+	   					var st = Math.floor(Math.random() * 3 + 1);//1，2，3用于选择控制三个敌方坦克
+	   		 			var sf = Math.floor(Math.random() * 4 + 1);//1，2，3，4用于上下左右方向选择
+						//var dl=parseInt(getComputedStyle(d1,null).left);
+	   		 			if (st == 1) {
+	   		 				var oldd1tt=parseInt(getComputedStyle(d1,null).top);
+			   		 		var oldd1ll=parseInt(getComputedStyle(d1,null).left);
+			   		 		if(sf == 1) {//d1上
+			   		 			var newd1ll=oldd1ll;
+								//console.log(newd1tt,newd1ll);
+			   		 			newd1tt = newd1tt < 20 ? 20 : newd1tt;//防止坦克跑出上边框
+			   		 			d1.style.top = newd1tt + "px";
+			   		 			if (237 < newd1ll && newd1ll < 310 && 263 < newd1tt && newd1tt < 340) {//障碍物碰撞检测
+            						d1.style.top = oldd1tt + "px";
+            					} else{
+            		 				d1.style.top = newd1tt + "px";
+            					}
+			   		 		} else if(sf == 2){//d1下
+			   		 			var newd1tt = oldd1tt + 20;
+			   		 			var newd1ll = oldd1ll;
+			   		 			newd1tt = newd1tt > 400 ? 400 : newd1tt;//防止坦克跑出下边框
+			   		 			d1.style.top = newd1tt + "px";
+			   		 			if (237 < newd1ll && newd1ll < 310 && 260 < newd1tt && newd1tt < 335) {//障碍物碰撞检测
+            						d1.style.top = oldd1tt + "px";
+            					} else{
+            		 				d1.style.top = newd1tt + "px";
+            					}
+			   		 		} else if(sf == 3){//d1左
+			   		 			var newd1tt = oldd1tt;
+			   		 			var newd1ll = oldd1ll - 20;
+			   		 			newd1ll = newd1ll < 20 ? 20 : newd1ll;//防止坦克跑出左边框
+			   		 			d1.style.left=newd1ll+"px";
+			   		 			if (263 < newd1tt && newd1tt < 335 && 237 < newd1ll && newd1ll < 315) {//障碍物碰撞检测
+            						d1.style.left = oldd1ll + "px";
+            					} else{
+            						d1.style.left = newd1ll + "px";
+            					}
+			   		 		} else if(sf == 4){//d1右
+			   		 			var newd1tt = oldd1tt;
+			   		 			var newd1ll = oldd1ll+20;
+			   		 			newd1ll = newd1ll > 700 ? 700 : newd1ll;//防止坦克跑出右边框
+			   		 			d1.style.left=newd1ll+"px";
+			   		 			if (263 < newd1tt&& newd1tt < 335 && 235 < newd1ll && newd1ll < 310) {//障碍物碰撞检测
+            						d1.style.left = oldd1ll + "px";
+            					} else{
+            						d1.style.left = newd1ll + "px";
+            					}
+			   		 		}
+		   		 		}
+	   		 			else if(st == 2){
+		   		 			var oldd2tt=parseInt(getComputedStyle(d2,null).top);
+			   		 		var oldd2ll=parseInt(getComputedStyle(d2,null).left);
+				 			if(sf == 1) {//d2上
+			   		 			var newd2tt = oldd2tt - 20;
+			   		 			var newd2ll = oldd2ll;
+			   		 			newd2tt = newd2tt < 20 ? 20 : newd2tt;
+			   		 			d2.style.top = newd2tt + "px";
+			   		 			if (237 < newd2ll && newd2ll < 310 && 263 < newd2tt && newd2tt < 340) {
+            						d2.style.top = oldd2tt + "px";
+            					} else{
+            		 				d2.style.top = newd2tt + "px";
+            					}
+			   		 		} else if(sf == 2){//d2下
+			   		 			var newd2tt = oldd2tt + 20;
+			   		 			var newd2ll = oldd2ll;
+			   		 			newd2tt = newd2tt > 400 ? 400 : newd2tt;
+			   		 			d2.style.top = newd2tt + "px";
+			   		 			if (237 < newd2ll && newd2ll < 310 && 260 < newd2tt && newd2tt < 335) {
+            						d2.style.top = oldd2tt + "px";
+            					} else{
+            		 				d2.style.top = newd2tt  + "px";
+            					}
+			   		 		} else if(sf == 3){//d2左
+			   		 			var newd2ll = oldd2ll - 20;
+			   		 			var newd2tt = oldd2tt
+			   		 			newd2ll = newd2ll < 20 ? 20 : newd2ll;
+			   		 			d2.style.left = newd2ll + "px";
+			   		 			if (263 < newd2tt && newd2tt < 335 && 237 < newd2ll && newd2ll < 315) {
+            						d2.style.left = oldd2ll + "px";
+            					} else{
+            						d2.style.left = newd2ll+ "px";
+            					}
+			   		 		} else if(sf == 4){//d2右
+			   		 			var newd2ll = oldd2ll + 20;
+			   		 			var newd2tt = oldd2tt;
+			   		 			newd2ll = newd2ll > 700 ? 700 : newd2ll;
+			   		 			d2.style.left = newd2ll+ "px";
+			   		 			if (263 < newd2tt && newd2tt < 335 && 235 < newd2ll && newd2ll < 310) {
+            						d2.style.left = oldd2ll+ "px";
+            					} else{
+            						d2.style.left = newd2ll + "px";
+            					}
+			   		 		}
+				 		}
+	   		 			else if(st == 3){
+				 			var oldd3tt = parseInt(getComputedStyle(d3,null).top);
+			   		 		var oldd3ll = parseInt(getComputedStyle(d3,null).left);
+				 			if(sf == 1) {//d3上
+			   		 			var newd3tt = oldd3tt - 20;
+			   		 			var newd3ll = oldd3ll;
+			   		 			newd3tt = newd3tt < 20 ? 20 : newd3tt;
+			   		 			d3.style.top = newd3tt+"px";
+			   		 			if (237 < newd3ll && newd3ll < 310 && 263< newd3tt && newd3tt < 340) {
+            						d3.style.top = oldd3tt+ "px";
+            					} else{
+            		 				d3.style.top = newd3tt  + "px";
+            					}
+			   		 		} else if(sf == 2){//d3下
+			   		 			var newd3tt = oldd3tt + 20;
+			   		 			var newd3ll = oldd3ll;
+			   		 			newd3tt = newd3tt > 400 ? 400 : newd3tt;
+			   		 			d3.style.top = newd3tt+"px";
+			   		 			if (237 < newd3ll && newd3ll < 310 && 260 < newd3tt && newd3tt < 335) {
+            						d3.style.top = oldd3tt + "px";
+            					} else{
+            		 				d3.style.top = newd3tt + "px";
+            					}
+			   		 		} else if(sf == 3){//d3左
+			   		 			var newd3ll = oldd3ll - 20;
+			   		 			var newd3tt = oldd3tt;
+			   		 			newd3ll = newd3ll <20 ? 20 : newd3ll;
+			   		 			d3.style.left = newd3ll + "px";
+			   		 			if (263 < newd3tt && newd3tt < 335 && 237 < newd3ll && newd3ll < 315) {
+            						d3.style.left = oldd3ll + "px";
+            					} else{
+            						d3.style.left = newd3ll + "px";
+            					}
+			   		 		} else if(sf == 4){//d3右
+			   		 			var newd3ll = oldd3ll + 20;
+			   		 			var newd3tt = oldd3tt;
+			   		 			newd3ll = newd3ll > 700 ? 700 : newd3ll;
+			   		 			d3.style.left = newd3ll+ "px";
+			   		 			if (263 < newd3tt && newd3tt < 335 && 235 < newd3ll && newd3ll < 310) {
+            						d3.style.left = oldd3ll + "px";
+            					} else{
+            						d3.style.left = newd3ll  + "px";
+            					}
+			   		 		}
+	   		 			}
+	   		 			},1000)
+		 		}
+		 		
+		 		
+		 	},500)		 	
+		 }
+		</script>
+	</body>
+</html>

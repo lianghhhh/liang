@@ -1,0 +1,23 @@
+{
+  "id": "2423437",
+  "name": "梁少文",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9067754",
+      "name": "坦克世界",
+      "font_class": "tankeshijie",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "17657888",
+      "name": "坦克百科",
+      "font_class": "tankebaike",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    }
+  ]
+}

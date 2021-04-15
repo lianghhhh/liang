@@ -1,0 +1,38 @@
+*{
+	margin: 0; padding: 0;
+}
+body{
+	text-align: center;
+}
+.box{
+	height: 623px;
+}
+.content{
+	width: 60%;height:85%;border: #E85E17 1px solid;
+	margin: 0 auto;position: relative;padding: 1px;
+}
+.content .icon-tankebaike{
+	background: #C81623;width: 40px;height:40px;font-size:40px;display: block;
+	transform: rotate(180deg);float: left;position: absolute
+	}
+.content #difang1{
+	top: 0;left:25%;
+}
+.content #difang2{
+	top: 0;left:48%;
+}
+.content #difang3{
+	top: 0;left:75%;
+}
+.content #wofang{
+	background: none;transform:none;display: block;top: 90%; left: 48%;
+}
+.content #qiangti1{
+	width: 40px;height: 40px;background: #000;position: absolute;top: 300px;left: 275px;
+}
+
+button{
+	padding: 10px 20px;border-radius: 5px;background: #e85e17;margin-top: 10px;margin-left: 20px;
+	border: none;color: #fff;outline: none;cursor: pointer
+}
+ 
